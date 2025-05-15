@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shadai's Colour Mixing Studio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    .color-picker {
+      margin: 1rem;
+    }
+    .result {
+      margin-top: 2rem;
+    }
+    #mixedColor {
+      width: 300px;
+      height: 300px;
+      margin: auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shadai's Colour Mixing Studio</h1>
+
+  <div>
+    <input type="color" id="color1" class="color-picker" value="#ff0000">
+    <input type="color" id="color2" class="color-picker" value="#0000ff">
+  </div>
+
+  <div class="result">
+    <h2>Mixed Color</h2>
+    <div id="mixedColor"></div>
+    <p id="colorCode"></p>
+  </div>
+
+  <script>
+    const color1 = document.getElementById('color1');
+    const color2 = document.getElementById('color2');
+    const mixedColor = document.getElementById('mixedColor');
+    const colorCode = document.getElementById('colorCode');
+
+    function hexToRgb(hex) {
+      const bigint = parseInt(hex.slice(1), 16);
+      return {
+        r: (bigint >> 16) & 255,
+        g: (bigint >> 8) & 255,
+        b: bigint & 255
+      };
+    }
+
+    function rgbToHex(r, g, b) {
+      return (
+        '#' +
+        [r, g, b]
+          .map(x => x.toString(16).padStart(2, '0'))
+          .join('')
+      );
+    }
+
+    function mixColors() {
+      const c1 = hexToRgb(color1.value);
+      const c2 = hexToRgb(color2.value);
+
+      const mixed = {
+        r: Math.floor((c1.r + c2.r) / 2),
+        g: Math.floor((c1.g + c2.g) / 2),
+        b: Math.floor((c1.b + c2.b) / 2)
+      };
+
+      const hex = rgbToHex(mixed.r, mixed.g, mixed.b);
+      mixedColor.style.backgroundColor = hex;
+      colorCode.textContent = `HEX: ${hex} | RGB: (${mixed.r}, ${mixed.g}, ${mixed.b})`;
+    }
+
+    color1.addEventListener('input', mixColors);
+    color2.addEventListener('input', mixColors);
+
+    // Initialize
+    mixColors();
+  </script>
+</body>
+</html>
